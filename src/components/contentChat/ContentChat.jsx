@@ -1,11 +1,11 @@
-import "../../sass/ContentChat.scss";
-import { useEffect, useRef, useState } from "react";
+import '../../sass/ContentChat.scss';
+import { useEffect, useRef, useState } from 'react';
 
 //import icon
-import { IoIosClose } from "react-icons/io";
-import { SendOutlined, EditOutlined } from "@ant-design/icons";
-import { LuSticker, LuAlarmClock, LuTrash } from "react-icons/lu";
-import { AiOutlineUsergroupAdd, AiTwotoneLike } from "react-icons/ai";
+import { IoIosClose } from 'react-icons/io';
+import { SendOutlined, EditOutlined } from '@ant-design/icons';
+import { LuSticker, LuAlarmClock, LuTrash } from 'react-icons/lu';
+import { AiOutlineUsergroupAdd, AiTwotoneLike } from 'react-icons/ai';
 import {
   IoVideocamOutline,
   IoSearchOutline,
@@ -13,45 +13,42 @@ import {
   IoChevronBack,
   IoCameraOutline,
   IoCallOutline,
-} from "react-icons/io5";
-import {
-  VscLayoutSidebarRightOff,
-  VscLayoutSidebarRight,
-} from "react-icons/vsc";
-import { BsBell, BsPinAngle, BsEyeSlash } from "react-icons/bs";
-import { HiOutlineUsers } from "react-icons/hi2";
-import { CiTrash } from "react-icons/ci";
-import { MdOutlineSettingsBackupRestore, MdGroups } from "react-icons/md";
-import { FaShare, FaCaretDown, FaCaretRight } from "react-icons/fa";
-import { BiSolidToggleLeft, BiSolidQuoteRight } from "react-icons/bi";
-import { MdKeyboardVoice } from "react-icons/md";
-import { GiNotebook } from "react-icons/gi";
-import { GrReturn } from "react-icons/gr";
+} from 'react-icons/io5';
+import { VscLayoutSidebarRightOff, VscLayoutSidebarRight } from 'react-icons/vsc';
+import { BsBell, BsPinAngle, BsEyeSlash } from 'react-icons/bs';
+import { HiOutlineUsers } from 'react-icons/hi2';
+import { CiTrash } from 'react-icons/ci';
+import { MdOutlineSettingsBackupRestore, MdGroups } from 'react-icons/md';
+import { FaShare, FaCaretDown, FaCaretRight } from 'react-icons/fa';
+import { BiSolidToggleLeft, BiSolidQuoteRight } from 'react-icons/bi';
+import { MdKeyboardVoice } from 'react-icons/md';
+import { GiNotebook } from 'react-icons/gi';
+import { GrReturn } from 'react-icons/gr';
 
-import axios from "axios";
+import axios from 'axios';
 
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 
-import { ReactMic } from "react-mic";
+import { ReactMic } from 'react-mic';
 
-import Picker from "@emoji-mart/react";
-import data from "@emoji-mart/data";
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
-import InfoUser from "./components/InfoUser";
-import FormUpdateName from "./components/formUpdateName";
-import ViewFile from "./components/ViewFile";
-import ForwardMessageForm from "./components/ForwardMessageForm";
-import moment from "moment";
-import ViewNewFriend from "./components/ViewNewFriend";
-import FormAddMemberToGroup from "./components/FormAddMemberToGroup";
-import FormChangeNameGroup from "./components/FormChangeNameGroup";
-import ViewListEmoji from "./components/ViewListEmoji";
+import InfoUser from './components/InfoUser';
+import FormUpdateName from './components/formUpdateName';
+import ViewFile from './components/ViewFile';
+import ForwardMessageForm from './components/ForwardMessageForm';
+import moment from 'moment';
+import ViewNewFriend from './components/ViewNewFriend';
+import FormAddMemberToGroup from './components/FormAddMemberToGroup';
+import FormChangeNameGroup from './components/FormChangeNameGroup';
+import ViewListEmoji from './components/ViewListEmoji';
 
-import toast from "react-hot-toast";
-import SlideZalo from "../home/SlideZalo";
+import toast from 'react-hot-toast';
+import SlideZalo from '../home/SlideZalo';
 
-import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import FormConfirm from "./components/FormConfirm";
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+import FormConfirm from './components/FormConfirm';
 
 const ContentChat = ({
   displayListChat,
@@ -73,17 +70,15 @@ const ContentChat = ({
   const [nameSender, setNameSender] = useState({});
   const [contentMessages, setContentMessages] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [hoverText, setHoverText] = useState("");
+  const [hoverText, setHoverText] = useState('');
 
   const [image, setImage] = useState(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [displayIcons, setDisplayIcons] = useState(false);
   const [isClickUpdate, setIsClickUpdate] = useState(false);
-  const [regexUrl] = useState(
-    "https://s3-dynamodb-cloudfront-20040331.s3.ap-southeast-1.amazonaws.com/"
-  );
+  const [regexUrl] = useState('https://zalo-clone-203.s3.ap-southeast-1.amazonaws.com/');
   const [socket, setSocket] = useState(null);
-  const [forwardedMessageContent, setForwardedMessageContent] = useState("");
+  const [forwardedMessageContent, setForwardedMessageContent] = useState('');
   const [showForwardForm, setShowForwardForm] = useState(false);
   const [showFormCard, setShowFormCard] = useState(false);
   const inputRef = useRef(null);
@@ -94,7 +89,7 @@ const ContentChat = ({
   const [isClickDownSetting, setIsClickDownSetting] = useState(false);
   const [isRecoding, setIsRecoding] = useState(false);
   const [voice, setVoice] = useState(false);
-  const [audioLink, setAudioLink] = useState("");
+  const [audioLink, setAudioLink] = useState('');
   const [voiceMessage, setVoiceMessage] = useState(null);
   const [page, setPage] = useState(1);
   const [group, setGroup] = useState(null);
@@ -102,21 +97,9 @@ const ContentChat = ({
   const [isClickDownMember, setIsClickDownMember] = useState(false);
   const [isClickDownNew, setIsClickDownNew] = useState(false);
   const [isClickAddMember, setIsClickAddMember] = useState(false);
-  const [fileType] = useState([
-    "xls",
-    "xlsx",
-    "doc",
-    "docx",
-    "csv",
-    "txt",
-    "ppt",
-    "pptx",
-    "rar",
-    "zip",
-    "fa-file",
-  ]);
-  const [imageType] = useState(["png", "jpeg", "jpg", "gif", "bmp", "tiff"]);
-  const [videoType] = useState(["mp3", "mp4"]);
+  const [fileType] = useState(['xls', 'xlsx', 'doc', 'docx', 'csv', 'txt', 'ppt', 'pptx', 'rar', 'zip', 'fa-file']);
+  const [imageType] = useState(['png', 'jpeg', 'jpg', 'gif', 'bmp', 'tiff']);
+  const [videoType] = useState(['mp3', 'mp4']);
   const [isClickViewMember, setIsClickViewMember] = useState(false);
   const [showUtilsForLeader, setShowUtilsForLeader] = useState(false);
   const [membersOfGroup, setMembersOfGroup] = useState(null);
@@ -127,28 +110,28 @@ const ContentChat = ({
   const [messageRelpy, setMessageRelpy] = useState(null);
   const [emojis] = useState([
     {
-      type: "like",
-      icon: "👍",
+      type: 'like',
+      icon: '👍',
     },
     {
-      type: "love",
-      icon: "❤️",
+      type: 'love',
+      icon: '❤️',
     },
     {
-      type: "haha",
-      icon: "😂",
+      type: 'haha',
+      icon: '😂',
     },
     {
-      type: "wow",
-      icon: "😲",
+      type: 'wow',
+      icon: '😲',
     },
     {
-      type: "sad",
-      icon: "😭",
+      type: 'sad',
+      icon: '😭',
     },
     {
-      type: "angry",
-      icon: "😡",
+      type: 'angry',
+      icon: '😡',
     },
   ]);
   const [isHoverEmoji, setIsHoverEmoji] = useState(false);
@@ -156,7 +139,7 @@ const ContentChat = ({
   const [selectedEmoji, setSelectedEmoji] = useState([]);
   const [isViewListEmoji, setIsViewListEmoji] = useState(false);
   const [quantityEmoji, setQuantityEmoji] = useState();
-  const [nameReply, setNameReply] = useState("");
+  const [nameReply, setNameReply] = useState('');
   const [chatSelectedDisplayEmojis, setChatSelectedDisplayEmojis] = useState(0);
   const [rerenderSocket, setRerenderSocket] = useState(false);
   const [isClickDisGroup, setIsClickDisGroup] = useState(false);
@@ -170,51 +153,33 @@ const ContentChat = ({
   useEffect(() => {
     let newSocket = io(`${urlBackend}`);
     setSocket(newSocket);
-  }, [
-    JSON.stringify(contentMessages),
-    JSON.stringify(idChat),
-    isReloadPage,
-    rerenderGroupChat,
-    rerenderSocket,
-  ]);
+  }, [JSON.stringify(contentMessages), JSON.stringify(idChat), isReloadPage, rerenderGroupChat, rerenderSocket]);
 
   useEffect(() => {
     if (idChat.id) {
       const fetchGroupChat = async () => {
         try {
-          const response = await axios.get(
-            `${urlBackend}/group-chats/${idChat.id}`
-          );
+          const response = await axios.get(`${urlBackend}/group-chats/${idChat.id}`);
           setGroup(response.data);
         } catch (error) {
-          console.error("Error fetching friends:", error);
+          console.error('Error fetching friends:', error);
         }
       };
       fetchGroupChat();
     }
-  }, [
-    userId,
-    JSON.stringify(idChat),
-    JSON.stringify(group),
-    isReloadPage,
-    rerenderGroupChat,
-  ]);
+  }, [userId, JSON.stringify(idChat), JSON.stringify(group), isReloadPage, rerenderGroupChat]);
 
   let isObjectEqual = (obj1, obj2) => {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   };
 
   useEffect(() => {
-    if (idChat.type === "Single") {
+    if (idChat.type === 'Single') {
       setIsGroup(false);
       socket?.on(
-        `Server-Chat-Room-${
-          userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`
-        }`,
+        `Server-Chat-Room-${userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`}`,
         (dataGot) => {
-          const exists = contentMessages.some((item) =>
-            isObjectEqual(item, dataGot.data)
-          );
+          const exists = contentMessages.some((item) => isObjectEqual(item, dataGot.data));
           if (!exists) {
             handleChangeMessageFinal(dataGot.data);
             setRerender((pre) => !pre);
@@ -224,9 +189,7 @@ const ContentChat = ({
       );
 
       socket?.on(
-        `Server-Status-Chat-${
-          userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`
-        }`,
+        `Server-Status-Chat-${userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`}`,
         (dataGot) => {
           handleChangeMessageFinal(dataGot.data.chatFinal);
           setIsReloadPage((pre) => !pre);
@@ -235,9 +198,7 @@ const ContentChat = ({
       );
 
       socket?.on(
-        `Server-Emotion-Chats-${
-          userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`
-        }`,
+        `Server-Emotion-Chats-${userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`}`,
         (dataGot) => {
           setIsReloadPage((pre) => !pre);
         }
@@ -245,9 +206,7 @@ const ContentChat = ({
     } else {
       setIsGroup(true);
       socket?.on(`Server-Chat-Room-${idChat.id}`, (dataGot) => {
-        const exists = contentMessages.some((item) =>
-          isObjectEqual(item, dataGot.data)
-        );
+        const exists = contentMessages.some((item) => isObjectEqual(item, dataGot.data));
         if (!exists) {
           handleChangeMessageFinal(dataGot.data);
           setRerender((pre) => !pre);
@@ -261,7 +220,7 @@ const ContentChat = ({
       });
 
       socket?.on(`Server-Emotion-Chats-${group?.id}`, (dataGot) => {
-        console.log("OKKKK");
+        console.log('OKKKK');
         setIsReloadPage((pre) => !pre);
       });
     }
@@ -279,15 +238,13 @@ const ContentChat = ({
   ]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [JSON.stringify(contentMessages), isReloadPage]);
 
   useEffect(() => {
     if (idChat.id) {
       let getApiMembersOfGroup = async () => {
-        let datas = await axios.get(
-          `${urlBackend}/users/get-members-in-group/${idChat.id}`
-        );
+        let datas = await axios.get(`${urlBackend}/users/get-members-in-group/${idChat.id}`);
         setMembersOfGroup([...datas.data]);
       };
       getApiMembersOfGroup();
@@ -297,9 +254,7 @@ const ContentChat = ({
   useEffect(() => {
     let getApiContentChats = async () => {
       let datas = await axios.get(
-        `${urlBackend}/chats/content-chats-between-users/${userId}-and-${
-          idChat.id
-        }/${page * 10}`
+        `${urlBackend}/chats/content-chats-between-users/${userId}-and-${idChat.id}/${page * 10}`
       );
       let sender = await axios.get(`${urlBackend}/users/${userId}`);
       let receiver = await axios.get(`${urlBackend}/users/${idChat.id}`);
@@ -307,7 +262,7 @@ const ContentChat = ({
       setContentMessages([
         ...datas.data.map((dt) => {
           if (dt.emojis) {
-            dt.emojis = [...new Set(dt.emojis.split(","))];
+            dt.emojis = [...new Set(dt.emojis.split(','))];
           }
           return dt;
         }),
@@ -326,15 +281,13 @@ const ContentChat = ({
 
     let getApiContentGroupChats = async () => {
       let datas = await axios.get(
-        `${urlBackend}/group-chats/content-chats-between-group/${
-          idChat.id
-        }/${userId}/${page * 10}`
+        `${urlBackend}/group-chats/content-chats-between-group/${idChat.id}/${userId}/${page * 10}`
       );
       let sender = await axios.get(`${urlBackend}/users/${datas.sender}`);
       setContentMessages([
         ...datas.data.map((dt) => {
           if (dt.emojis) {
-            dt.emojis = [...new Set(dt.emojis.split(","))];
+            dt.emojis = [...new Set(dt.emojis.split(','))];
           }
           return dt;
         }),
@@ -346,7 +299,7 @@ const ContentChat = ({
     };
 
     if (idChat.id) {
-      if (idChat.type === "Single") {
+      if (idChat.type === 'Single') {
         getApiContentChats();
       } else {
         getApiContentGroupChats();
@@ -361,18 +314,15 @@ const ContentChat = ({
   }, [JSON.stringify(idChat)]);
 
   const sendMessage = () => {
-    if (idChat.type === "Single") {
+    if (idChat.type === 'Single') {
       if (message !== null) {
         socket.emit(`Client-Chat-Room`, {
           message: message,
-          dateTimeSend: moment().format("YYYY-MM-DD HH:mm:ss"),
+          dateTimeSend: moment().format('YYYY-MM-DD HH:mm:ss'),
           sender: userId,
           receiver: idChat.id,
           chatReply: messageRelpy?.id,
-          chatRoom:
-            userId > idChat.id
-              ? `${idChat.id}${userId}`
-              : `${userId}${idChat.id}`,
+          chatRoom: userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`,
           type: idChat.type,
         });
       }
@@ -380,7 +330,7 @@ const ContentChat = ({
       if (message !== null) {
         socket.emit(`Client-Chat-Room`, {
           message: message,
-          dateTimeSend: moment().format("YYYY-MM-DD HH:mm:ss"),
+          dateTimeSend: moment().format('YYYY-MM-DD HH:mm:ss'),
           sender: userId,
           groupChat: idChat.id,
           chatReply: messageRelpy?.id ? messageRelpy?.id : null,
@@ -389,7 +339,7 @@ const ContentChat = ({
         });
       }
     }
-    setMessage("");
+    setMessage('');
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -417,7 +367,7 @@ const ContentChat = ({
 
         const reactFile = {
           originalname: file.name,
-          encoding: "7bit",
+          encoding: '7bit',
           mimetype: file.type,
           buffer: buffer,
           size: file.size,
@@ -425,12 +375,12 @@ const ContentChat = ({
         // TODO: Sử dụng đối tượng reactFile theo nhu cầu của bạn
         socket.emit(`Client-Chat-Room`, {
           file: reactFile,
-          dateTimeSend: moment().utcOffset(7).format("YYYY-MM-DD HH:mm:ss"),
+          dateTimeSend: moment().utcOffset(7).format('YYYY-MM-DD HH:mm:ss'),
           sender: userId,
-          receiver: idChat.type === "Single" ? idChat.id : null,
-          groupChat: idChat.type === "Group" ? idChat.id : null,
+          receiver: idChat.type === 'Single' ? idChat.id : null,
+          groupChat: idChat.type === 'Group' ? idChat.id : null,
           chatRoom:
-            idChat.type === "Single"
+            idChat.type === 'Single'
               ? userId > idChat.id
                 ? `${idChat.id}${userId}`
                 : `${userId}${idChat.id}`
@@ -440,7 +390,7 @@ const ContentChat = ({
 
       reader.readAsArrayBuffer(file);
     }
-    setMessage("");
+    setMessage('');
     setDisplayIcons(false);
     setIsReloadPage((pre) => !pre);
   };
@@ -452,14 +402,14 @@ const ContentChat = ({
     const millisIn24Hours = 24 * 60 * 60 * 1000;
     const isSentMoreThan24HoursAgo = timeDiff >= millisIn24Hours;
     if (isSentMoreThan24HoursAgo) {
-      toast.error("Bạn chỉ có thể thu hồi tin nhắn trong vòng 24h!");
+      toast.error('Bạn chỉ có thể thu hồi tin nhắn trong vòng 24h!');
     } else {
       socket.emit(`Client-Status-Chat`, {
         status: status,
         implementer: userId,
         chat: chat,
         chatRoom:
-          idChat.type === "Single"
+          idChat.type === 'Single'
             ? userId > idChat.id
               ? `${idChat.id}${userId}`
               : `${userId}${idChat.id}`
@@ -477,8 +427,8 @@ const ContentChat = ({
         const buffer = readerEvent.target.result;
 
         const reactFile = {
-          originalname: "VoiceMessage",
-          encoding: "7bit",
+          originalname: 'VoiceMessage',
+          encoding: '7bit',
           mimetype: voiceMessage.options.mimeType,
           buffer: buffer,
           size: voiceMessage.blob.size,
@@ -486,12 +436,12 @@ const ContentChat = ({
         // TODO: Sử dụng đối tượng reactFile theo nhu cầu của bạn
         socket.emit(`Client-Chat-Room`, {
           file: reactFile,
-          dateTimeSend: moment().utcOffset(7).format("YYYY-MM-DD HH:mm:ss"),
+          dateTimeSend: moment().utcOffset(7).format('YYYY-MM-DD HH:mm:ss'),
           sender: userId,
-          receiver: idChat.type === "Single" ? idChat.id : null,
-          groupChat: idChat.type === "Group" ? idChat.id : null,
+          receiver: idChat.type === 'Single' ? idChat.id : null,
+          groupChat: idChat.type === 'Group' ? idChat.id : null,
           chatRoom:
-            idChat.type === "Single"
+            idChat.type === 'Single'
               ? userId > idChat.id
                 ? `${idChat.id}${userId}`
                 : `${userId}${idChat.id}`
@@ -534,13 +484,13 @@ const ContentChat = ({
   };
 
   const handleClickRecording = () => {
-    setAudioLink("");
+    setAudioLink('');
     setIsRecoding(!isRecoding);
   };
 
   let handleClickDeleteMember = async (id) => {
     if (group.leader === id) {
-      toast.error("Bạn phải chuyển trưởng nhóm trước khi rời.");
+      toast.error('Bạn phải chuyển trưởng nhóm trước khi rời.');
     } else {
       socket.emit(`Client-Update-Group-Chats`, {
         group: group,
@@ -586,15 +536,8 @@ const ContentChat = ({
       implementer: userId,
       chat: chat,
       chatRoom:
-        idChat.type === "Single"
-          ? userId > idChat.id
-            ? `${idChat.id}${userId}`
-            : `${userId}${idChat.id}`
-          : idChat.id,
-      members:
-        idChat.type === "Single"
-          ? [nameSender.id, nameReceiver.id]
-          : group.members,
+        idChat.type === 'Single' ? (userId > idChat.id ? `${idChat.id}${userId}` : `${userId}${idChat.id}`) : idChat.id,
+      members: idChat.type === 'Single' ? [nameSender.id, nameReceiver.id] : group.members,
     });
     setIsHoverEmoji(false);
     setRerenderSocket((pre) => pre);
@@ -611,13 +554,13 @@ const ContentChat = ({
     let targetUser;
     if (isGroup) {
       targetUser = membersOfGroup?.map((user) => ({
-        userID: user.id + "",
+        userID: user.id + '',
         userName: user.name,
       }));
     } else {
       targetUser = [
         {
-          userID: nameReceiver.id + "",
+          userID: nameReceiver.id + '',
           userName: nameReceiver.name,
         },
       ];
@@ -639,13 +582,13 @@ const ContentChat = ({
     let targetUser;
     if (isGroup) {
       targetUser = membersOfGroup?.map((user) => ({
-        userID: user.id + "",
+        userID: user.id + '',
         userName: user.name,
       }));
     } else {
       targetUser = [
         {
-          userID: nameReceiver.id + "",
+          userID: nameReceiver.id + '',
           userName: nameReceiver.name,
         },
       ];
@@ -664,10 +607,7 @@ const ContentChat = ({
   };
 
   return (
-    <div
-      className="container-content-chat"
-      style={{ width: displayListChat ? "71%" : "96%" }}
-    >
+    <div className="container-content-chat" style={{ width: displayListChat ? '71%' : '96%' }}>
       {/* slide */}
       {!idChat.id ? (
         <SlideZalo />
@@ -683,7 +623,7 @@ const ContentChat = ({
           <FormUpdateName
             setVisible={setIsClickUpdate}
             visible={isClickUpdate}
-            user={nameReceiver ? nameReceiver : ""}
+            user={nameReceiver ? nameReceiver : ''}
             urlBackend={urlBackend}
           />
           <FormAddMemberToGroup
@@ -719,44 +659,30 @@ const ContentChat = ({
               visible={isClickDisGroup}
               group={group ? group : null}
               socket={socket}
-              message={"Bạn có chắc chắn muốn giải tán nhóm?"}
+              message={'Bạn có chắc chắn muốn giải tán nhóm?'}
             />
           )}
-          <div
-            className="content-chat"
-            style={{ width: isClickInfo ? "70%" : "" }}
-          >
+          <div className="content-chat" style={{ width: isClickInfo ? '70%' : '' }}>
             <div className="chat-header">
               <div className="chat-header-left">
-                <div
-                  className="chat-header-left-avt"
-                  onClick={() => setIsClickUser(true)}
-                >
+                <div className="chat-header-left-avt" onClick={() => setIsClickUser(true)}>
                   <img
-                    src={
-                      nameReceiver?.image == null
-                        ? group?.image
-                        : nameReceiver?.image
-                    }
+                    src={nameReceiver?.image == null ? group?.image : nameReceiver?.image}
                     style={{
-                      width: "60px",
-                      height: "60px",
-                      borderRadius: "50%",
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '50%',
                     }}
                   />
                 </div>
                 <div className="chat-header-left-name">
                   <div className="user">
-                    <div className="user-name">
-                      {nameReceiver?.name ? nameReceiver?.name : group?.name}
-                    </div>
+                    <div className="user-name">{nameReceiver?.name ? nameReceiver?.name : group?.name}</div>
                     <div className="user-edit">
                       {nameReceiver?.name ? (
                         <EditOutlined onClick={() => setIsClickUpdate(true)} />
                       ) : (
-                        <EditOutlined
-                          onClick={() => setIsClickUpdateNameGroup(true)}
-                        />
+                        <EditOutlined onClick={() => setIsClickUpdateNameGroup(true)} />
                       )}
                     </div>
                   </div>
@@ -765,26 +691,20 @@ const ContentChat = ({
               </div>
               <div className="chat-header-right">
                 <div className="chat-header-right-icon">
-                  <IoSearchOutline className="icon" />{" "}
+                  <IoSearchOutline className="icon" />{' '}
                 </div>
-                <div
-                  className="chat-header-right-icon"
-                  onClick={handleClickVoiceCall}
-                >
+                <div className="chat-header-right-icon" onClick={handleClickVoiceCall}>
                   <IoCallOutline className="icon" />
                 </div>
-                <div
-                  className="chat-header-right-icon"
-                  onClick={handleClickVideoCall}
-                >
+                <div className="chat-header-right-icon" onClick={handleClickVideoCall}>
                   <IoVideocamOutline className="icon" />
                 </div>
                 <div
                   className="chat-header-right-icon"
                   onClick={() => setIsClickInfo(!isClickInfo)}
                   style={{
-                    color: isClickInfo ? "#0068ff" : "",
-                    background: isClickInfo ? "#d4e4fa" : "",
+                    color: isClickInfo ? '#0068ff' : '',
+                    background: isClickInfo ? '#d4e4fa' : '',
                   }}
                 >
                   {isClickInfo ? (
@@ -795,100 +715,69 @@ const ContentChat = ({
                 </div>
               </div>
             </div>
-            <div
-              className="chat-view"
-              onScroll={(e) => handleScrollContentChats(e)}
-            >
+            <div className="chat-view" onScroll={(e) => handleScrollContentChats(e)}>
               {contentMessages.map((message, index) => {
                 return message.isRecalls ? (
                   <div
-                    ref={
-                      index === contentMessages.length - 1 ? scrollRef : null
-                    }
+                    ref={index === contentMessages.length - 1 ? scrollRef : null}
                     key={index}
                     className="message"
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     style={{
-                      justifyContent:
-                        message.sender !== userId ? "flex-start" : "flex-end",
-                      marginTop: index === 0 ? "10px" : "0px",
+                      justifyContent: message.sender !== userId ? 'flex-start' : 'flex-end',
+                      marginTop: index === 0 ? '10px' : '0px',
                     }}
                   >
                     {message.sender !== userId ? (
                       <img
-                        src={
-                          nameReceiver.image == null
-                            ? message.imageUser
-                            : nameReceiver.image
-                        }
+                        src={nameReceiver.image == null ? message.imageUser : nameReceiver.image}
                         className="avatar-user"
                         onClick={() => setIsClickUser(true)}
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                       />
                     ) : null}
                     <div className="content-message">
-                      <span className="info mess" style={{ color: "#7B8089" }}>
+                      <span className="info mess" style={{ color: '#7B8089' }}>
                         Tin nhắn đã được thu hồi
                       </span>
-                      <span
-                        className="info time"
-                        style={{ fontSize: 10, color: "darkgrey" }}
-                      >
+                      <span className="info time" style={{ fontSize: 10, color: 'darkgrey' }}>
                         {message.dateTimeSend?.slice(11, 16)}
                       </span>
                     </div>
-                    {index === hoveredIndex &&
-                    message.sender !== userId &&
-                    !message.isRecalls ? (
-                      <div style={{ width: "100px", height: "20px" }}>
+                    {index === hoveredIndex && message.sender !== userId && !message.isRecalls ? (
+                      <div style={{ width: '100px', height: '20px' }}>
                         <div
                           className="utils-message"
                           style={{
-                            marginLeft: "7px",
-                            marginTop: "5px",
-                            width: "48px",
+                            marginLeft: '7px',
+                            marginTop: '5px',
+                            width: '48px',
                           }}
                         >
                           <CiTrash
                             style={{
-                              color:
-                                hoverText == "Xóa chỉ ở phía tôi"
-                                  ? "#005ae0"
-                                  : "",
+                              color: hoverText == 'Xóa chỉ ở phía tôi' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() =>
-                              setHoverText("Xóa chỉ ở phía tôi")
-                            }
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleClickStatusChat(
-                                "delete",
-                                userId,
-                                message.id
-                              )
-                            }
+                            onMouseEnter={() => setHoverText('Xóa chỉ ở phía tôi')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleClickStatusChat('delete', userId, message.id)}
                           />
                           <FaShare
                             style={{
-                              fontSize: "20px",
-                              color:
-                                hoverText === "Chuyển tiếp" ? "#005ae0" : "",
+                              fontSize: '20px',
+                              color: hoverText === 'Chuyển tiếp' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() => setHoverText("Chuyển tiếp")}
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleForwardButtonClick(message.message)
-                            }
+                            onMouseEnter={() => setHoverText('Chuyển tiếp')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleForwardButtonClick(message.message)}
                           />
                           {showForwardForm && (
                             <ForwardMessageForm
                               userId={userId}
                               visible={showForwardForm}
                               onCancel={handleForwardFormCancel}
-                              sharedContentFromInfoMess={
-                                forwardedMessageContent
-                              }
+                              sharedContentFromInfoMess={forwardedMessageContent}
                               setRerender={setRerender}
                               urlBackend={urlBackend}
                             />
@@ -896,21 +785,19 @@ const ContentChat = ({
                         </div>
                         <span
                           style={{
-                            fontSize: "12px",
-                            backgroundColor: "#261e1e",
-                            color: "#c3c1c1",
+                            fontSize: '12px',
+                            backgroundColor: '#261e1e',
+                            color: '#c3c1c1',
                           }}
                         >
                           {hoverText}
                         </span>
                       </div>
                     ) : (
-                      ""
+                      ''
                     )}
                   </div>
-                ) : message.message.match(
-                    /Bạn và(?:\s"[^"]+"|\s[^"]+|\s\w+)\sđã trở thành bạn/g
-                  ) ? (
+                ) : message.message.match(/Bạn và(?:\s"[^"]+"|\s[^"]+|\s\w+)\sđã trở thành bạn/g) ? (
                   <ViewNewFriend
                     key={message.id}
                     name={nameReceiver.name}
@@ -920,118 +807,84 @@ const ContentChat = ({
                   />
                 ) : message.message.match(/(.+) đã thêm (.+) vào nhóm\./) ||
                   message.message.match(/(.+) đã xóa (.+) khỏi nhóm\./) ||
-                  message.message.match(
-                    /(.+) đã phân quyền (.+) thành (.+) nhóm\./
-                  ) ? (
+                  message.message.match(/(.+) đã phân quyền (.+) thành (.+) nhóm\./) ? (
                   <span
                     style={{
-                      color: "#7589A3",
-                      fontSize: "12px",
-                      margin: "3px 0px",
+                      color: '#7589A3',
+                      fontSize: '12px',
+                      margin: '3px 0px',
                     }}
                   >
                     {message.message}
                   </span>
                 ) : (
                   <div
-                    ref={
-                      index === contentMessages.length - 1 ? scrollRef : null
-                    }
+                    ref={index === contentMessages.length - 1 ? scrollRef : null}
                     key={index}
                     className="message"
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     style={{
-                      justifyContent:
-                        message.sender !== userId ? "flex-start" : "flex-end",
-                      marginTop: index === 0 ? "10px" : "0px",
+                      justifyContent: message.sender !== userId ? 'flex-start' : 'flex-end',
+                      marginTop: index === 0 ? '10px' : '0px',
                     }}
                   >
                     {message.sender !== userId ? (
                       <img
-                        src={
-                          nameReceiver.image == null
-                            ? message.imageUser
-                            : nameReceiver.image
-                        }
+                        src={nameReceiver.image == null ? message.imageUser : nameReceiver.image}
                         className="avatar-user"
                         onClick={() => setIsClickUser(true)}
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                       />
                     ) : null}
-                    {index === hoveredIndex &&
-                    message.sender === userId &&
-                    !isHoverEmoji ? (
-                      <div style={{ width: "120px", height: "20px" }}>
+                    {index === hoveredIndex && message.sender === userId && !isHoverEmoji ? (
+                      <div style={{ width: '120px', height: '20px' }}>
                         <div
                           className="utils-message"
                           style={{
-                            marginLeft: "12px",
-                            marginTop: "5px",
-                            width: "100px",
+                            marginLeft: '12px',
+                            marginTop: '5px',
+                            width: '100px',
                           }}
                         >
                           <BiSolidQuoteRight
                             style={{
-                              color: hoverText == "Trả lời" ? "#005ae0" : "",
+                              color: hoverText == 'Trả lời' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() => setHoverText("Trả lời")}
-                            onMouseLeave={() => setHoverText("")}
+                            onMouseEnter={() => setHoverText('Trả lời')}
+                            onMouseLeave={() => setHoverText('')}
                             onClick={() => handleClickReplyChat(message)}
                           />
                           <MdOutlineSettingsBackupRestore
                             style={{
-                              color: hoverText == "Thu hồi" ? "#005ae0" : "",
+                              color: hoverText == 'Thu hồi' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() => setHoverText("Thu hồi")}
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleClickStatusChat(
-                                "recalls",
-                                userId,
-                                message.id,
-                                message.dateTimeSend
-                              )
-                            }
+                            onMouseEnter={() => setHoverText('Thu hồi')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleClickStatusChat('recalls', userId, message.id, message.dateTimeSend)}
                           />
                           <CiTrash
                             style={{
-                              color:
-                                hoverText == "Xóa chỉ ở phía tôi"
-                                  ? "#005ae0"
-                                  : "",
+                              color: hoverText == 'Xóa chỉ ở phía tôi' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() =>
-                              setHoverText("Xóa chỉ ở phía tôi")
-                            }
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleClickStatusChat(
-                                "delete",
-                                userId,
-                                message.id
-                              )
-                            }
+                            onMouseEnter={() => setHoverText('Xóa chỉ ở phía tôi')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleClickStatusChat('delete', userId, message.id)}
                           />
                           <FaShare
                             style={{
-                              color:
-                                hoverText === "Chuyển tiếp" ? "#005ae0" : "",
+                              color: hoverText === 'Chuyển tiếp' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() => setHoverText("Chuyển tiếp")}
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleForwardButtonClick(message.message)
-                            }
+                            onMouseEnter={() => setHoverText('Chuyển tiếp')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleForwardButtonClick(message.message)}
                           />
                           {showForwardForm && (
                             <ForwardMessageForm
                               userId={userId}
                               visible={showForwardForm}
                               onCancel={handleForwardFormCancel}
-                              sharedContentFromInfoMess={
-                                forwardedMessageContent
-                              }
+                              sharedContentFromInfoMess={forwardedMessageContent}
                               setRerender={setRerender}
                               urlBackend={urlBackend}
                             />
@@ -1040,49 +893,29 @@ const ContentChat = ({
 
                         <span
                           style={{
-                            fontSize: "12px",
-                            backgroundColor: "#261e1e",
-                            color: "#c3c1c1",
+                            fontSize: '12px',
+                            backgroundColor: '#261e1e',
+                            color: '#c3c1c1',
                           }}
                         >
                           {hoverText}
                         </span>
                       </div>
                     ) : (
-                      ""
+                      ''
                     )}
                     <div>
-                      {!nameReceiver.name && message.sender !== userId && (
-                        <span>{message.name}</span>
-                      )}
-                      <div
-                        className="content-message"
-                        style={{ minWidth: message.emojis && "200px" }}
-                      >
+                      {!nameReceiver.name && message.sender !== userId && <span>{message.name}</span>}
+                      <div className="content-message" style={{ minWidth: message.emojis && '200px' }}>
                         {message.chatReply ? (
-                          <div
-                            className="content-message-reply"
-                            style={{ width: "100%" }}
-                          >
+                          <div className="content-message-reply" style={{ width: '100%' }}>
                             <div>
-                              <b>
-                                {
-                                  contentMessages.find(
-                                    (ms) => ms.id === message.chatReply
-                                  )?.name
-                                }
-                              </b>
+                              <b>{contentMessages.find((ms) => ms.id === message.chatReply)?.name}</b>
                             </div>
-                            <div>
-                              {
-                                contentMessages.find(
-                                  (ms) => ms.id === message.chatReply
-                                )?.message
-                              }
-                            </div>
+                            <div>{contentMessages.find((ms) => ms.id === message.chatReply)?.message}</div>
                           </div>
                         ) : (
-                          ""
+                          ''
                         )}
 
                         {message.message.includes(regexUrl) ? (
@@ -1095,8 +928,8 @@ const ContentChat = ({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
-                                  color: "blue",
-                                  textDecoration: "underline",
+                                  color: 'blue',
+                                  textDecoration: 'underline',
                                 }}
                               >
                                 {message.message}
@@ -1106,10 +939,7 @@ const ContentChat = ({
                             )}
                           </span>
                         )}
-                        <span
-                          className="info time"
-                          style={{ fontSize: 10, color: "darkgrey" }}
-                        >
+                        <span className="info time" style={{ fontSize: 10, color: 'darkgrey' }}>
                           {message.dateTimeSend?.slice(11, 16)}
                         </span>
                         {
@@ -1117,34 +947,22 @@ const ContentChat = ({
                             {message.emojis && (
                               <div
                                 style={{
-                                  position: "absolute",
+                                  position: 'absolute',
                                   bottom: -10,
                                   right: 50,
-                                  border: "1px solid #b4b4b4",
-                                  borderRadius: "10px",
-                                  padding: "2px 10px",
-                                  backgroundColor: "white",
-                                  cursor: "pointer",
+                                  border: '1px solid #b4b4b4',
+                                  borderRadius: '10px',
+                                  padding: '2px 10px',
+                                  backgroundColor: 'white',
+                                  cursor: 'pointer',
                                 }}
-                                onClick={() =>
-                                  handleClickViewListEmoji(
-                                    message.id,
-                                    message.emojis,
-                                    message.quantities
-                                  )
-                                }
+                                onClick={() => handleClickViewListEmoji(message.id, message.emojis, message.quantities)}
                               >
                                 {message.emojis.map((e, index) => {
                                   if (index < 3) {
                                     return (
-                                      <span
-                                        style={{ margin: "1px" }}
-                                        key={index}
-                                      >
-                                        {
-                                          emojis.find((ej) => ej.type === e)
-                                            .icon
-                                        }
+                                      <span style={{ margin: '1px' }} key={index}>
+                                        {emojis.find((ej) => ej.type === e).icon}
                                       </span>
                                     );
                                   }
@@ -1165,10 +983,9 @@ const ContentChat = ({
                           <div
                             className="emojis"
                             style={{
-                              width: "200px",
-                              padding: "0px 10px",
-                              marginRight:
-                                message.sender === userId ? "20px" : "0px",
+                              width: '200px',
+                              padding: '0px 10px',
+                              marginRight: message.sender === userId ? '20px' : '0px',
                             }}
                             onMouseEnter={() => setIsHoverEmoji(true)}
                             onMouseLeave={() => setIsHoverEmoji(false)}
@@ -1180,81 +997,60 @@ const ContentChat = ({
                                 onMouseEnter={() => setHoveredIndexE(index)}
                                 onMouseLeave={() => setHoveredIndexE(null)}
                                 style={{
-                                  cursor: "pointer",
-                                  fontSize:
-                                    index === hoveredIndexE ? "18px" : "15px",
+                                  cursor: 'pointer',
+                                  fontSize: index === hoveredIndexE ? '18px' : '15px',
                                 }}
-                                onClick={() =>
-                                  handleClickEmoji(message.id, emoji)
-                                }
+                                onClick={() => handleClickEmoji(message.id, emoji)}
                               >
                                 {emoji.icon}
                               </div>
                             ))}
                           </div>
                         ) : (
-                          ""
+                          ''
                         )}
                       </div>
                     </div>
-                    {index === hoveredIndex &&
-                    message.sender !== userId &&
-                    !isHoverEmoji ? (
-                      <div style={{ width: "100px", height: "20px" }}>
+                    {index === hoveredIndex && message.sender !== userId && !isHoverEmoji ? (
+                      <div style={{ width: '100px', height: '20px' }}>
                         <div
                           className="utils-message"
                           style={{
-                            marginLeft: "7px",
-                            marginTop: "5px",
-                            width: "80px",
+                            marginLeft: '7px',
+                            marginTop: '5px',
+                            width: '80px',
                           }}
                         >
                           <BiSolidQuoteRight
                             style={{
-                              color: hoverText == "Trả lời" ? "#005ae0" : "",
+                              color: hoverText == 'Trả lời' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() => setHoverText("Trả lời")}
-                            onMouseLeave={() => setHoverText("")}
+                            onMouseEnter={() => setHoverText('Trả lời')}
+                            onMouseLeave={() => setHoverText('')}
                             onClick={() => handleClickReplyChat(message)}
                           />
                           <CiTrash
                             style={{
-                              color:
-                                hoverText == "Xóa chỉ ở phía tôi"
-                                  ? "#005ae0"
-                                  : "",
+                              color: hoverText == 'Xóa chỉ ở phía tôi' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() =>
-                              setHoverText("Xóa chỉ ở phía tôi")
-                            }
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleClickStatusChat(
-                                "delete",
-                                userId,
-                                message.id
-                              )
-                            }
+                            onMouseEnter={() => setHoverText('Xóa chỉ ở phía tôi')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleClickStatusChat('delete', userId, message.id)}
                           />
                           <FaShare
                             style={{
-                              color:
-                                hoverText === "Chuyển tiếp" ? "#005ae0" : "",
+                              color: hoverText === 'Chuyển tiếp' ? '#005ae0' : '',
                             }}
-                            onMouseEnter={() => setHoverText("Chuyển tiếp")}
-                            onMouseLeave={() => setHoverText("")}
-                            onClick={() =>
-                              handleForwardButtonClick(message.message)
-                            }
+                            onMouseEnter={() => setHoverText('Chuyển tiếp')}
+                            onMouseLeave={() => setHoverText('')}
+                            onClick={() => handleForwardButtonClick(message.message)}
                           />
                           {showForwardForm && (
                             <ForwardMessageForm
                               userId={userId}
                               visible={showForwardForm}
                               onCancel={handleForwardFormCancel}
-                              sharedContentFromInfoMess={
-                                forwardedMessageContent
-                              }
+                              sharedContentFromInfoMess={forwardedMessageContent}
                               setRerender={setRerender}
                               urlBackend={urlBackend}
                             />
@@ -1262,16 +1058,16 @@ const ContentChat = ({
                         </div>
                         <span
                           style={{
-                            fontSize: "12px",
-                            backgroundColor: "#261e1e",
-                            color: "#c3c1c1",
+                            fontSize: '12px',
+                            backgroundColor: '#261e1e',
+                            color: '#c3c1c1',
                           }}
                         >
                           {hoverText}
                         </span>
                       </div>
                     ) : (
-                      ""
+                      ''
                     )}
                   </div>
                 );
@@ -1284,8 +1080,8 @@ const ContentChat = ({
                 className="chat-utilities-icon"
                 onClick={() => setIsClickSticker(!isClickSticker)}
                 style={{
-                  color: isClickSticker ? "#0068ff" : "",
-                  background: isClickSticker ? "#d4e4fa" : "",
+                  color: isClickSticker ? '#0068ff' : '',
+                  background: isClickSticker ? '#d4e4fa' : '',
                 }}
               >
                 <LuSticker className="icon" />
@@ -1296,7 +1092,7 @@ const ContentChat = ({
                   type="file"
                   accept=".png, .jpg, .jpeg, .gif, .bmp, .tiff"
                   multiple
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   id="image"
                   onChange={(e) => handleChangeFile(e)}
                 />
@@ -1310,7 +1106,7 @@ const ContentChat = ({
                   type="file"
                   accept=".xls, .xlsx, .doc, .docx, .csv, .txt, .ppt, .pptx, .mp3, .mp4, .rar, .zip, .fa-file"
                   multiple
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   id="file"
                   onChange={(e) => handleChangeFile(e)}
                 />
@@ -1336,28 +1132,25 @@ const ContentChat = ({
               <div
                 className="chat-utilities-icon"
                 style={{
-                  backgroundColor: isRecoding ? "#d4e4fa" : "",
-                  color: isRecoding ? "#0068ff" : "",
+                  backgroundColor: isRecoding ? '#d4e4fa' : '',
+                  color: isRecoding ? '#0068ff' : '',
                 }}
               >
-                <MdKeyboardVoice
-                  className="icon"
-                  onClick={handleClickRecording}
-                />
+                <MdKeyboardVoice className="icon" onClick={handleClickRecording} />
                 {isRecoding && (
                   <div
                     style={{
-                      position: "absolute",
-                      display: "flex",
-                      width: "200px",
-                      justifyContent: "space-around",
-                      textAlign: "center",
-                      height: "100px",
-                      margin: "0 0 180px 10px",
-                      flexDirection: "column",
-                      backgroundColor: "white",
-                      padding: "10px 10px 0 10px",
-                      boxShadow: "0 0 5px #b4a7a7",
+                      position: 'absolute',
+                      display: 'flex',
+                      width: '200px',
+                      justifyContent: 'space-around',
+                      textAlign: 'center',
+                      height: '100px',
+                      margin: '0 0 180px 10px',
+                      flexDirection: 'column',
+                      backgroundColor: 'white',
+                      padding: '10px 10px 0 10px',
+                      boxShadow: '0 0 5px #b4a7a7',
                     }}
                   >
                     {!audioLink && (
@@ -1384,16 +1177,16 @@ const ContentChat = ({
 
                         <div
                           style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                           }}
                         >
                           <button
                             style={{
-                              padding: "3px 10px",
-                              borderRadius: "10px",
-                              margin: "10px",
+                              padding: '3px 10px',
+                              borderRadius: '10px',
+                              margin: '10px',
                             }}
                             onClick={() => setAudioLink(false)}
                           >
@@ -1401,10 +1194,10 @@ const ContentChat = ({
                           </button>
                           <button
                             style={{
-                              backgroundColor: "#94caf9",
-                              padding: "3px 10px",
-                              borderRadius: "10px",
-                              margin: "10px",
+                              backgroundColor: '#94caf9',
+                              padding: '3px 10px',
+                              borderRadius: '10px',
+                              margin: '10px',
                             }}
                             onClick={handleClickSendVoiceMessage}
                           >
@@ -1423,28 +1216,19 @@ const ContentChat = ({
                 <i className="fa-regular fa-square-check icon"></i>
               </div> */}
             </div>
-            <div
-              className="chat"
-              style={{ height: isClickReply ? "15%" : "12%" }}
-            >
-              <div
-                className="chat-reply"
-                style={{ display: isClickReply ? "flex" : "none" }}
-              >
+            <div className="chat" style={{ height: isClickReply ? '15%' : '12%' }}>
+              <div className="chat-reply" style={{ display: isClickReply ? 'flex' : 'none' }}>
                 <div className="chat-reply-message">
                   <div className="reply-title">
-                    <BiSolidQuoteRight />{" "}
-                    <span style={{ marginLeft: "5px" }}>
+                    <BiSolidQuoteRight />{' '}
+                    <span style={{ marginLeft: '5px' }}>
                       Trả lời <b>{nameReply}</b>
                     </span>
                   </div>
                   <div className="reply-message">{messageRelpy?.message}</div>
                 </div>
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setIsClickReply(false)}
-                >
-                  <IoIosClose style={{ fontSize: "20px" }} />
+                <div style={{ cursor: 'pointer' }} onClick={() => setIsClickReply(false)}>
+                  <IoIosClose style={{ fontSize: '20px' }} />
                 </div>
               </div>
               <div className="chat-text">
@@ -1454,35 +1238,24 @@ const ContentChat = ({
                     ref={inputRef}
                     className="chat-text-input"
                     type="text"
-                    placeholder={`Nhập @, tin nhắn tới ${
-                      nameReceiver?.name ? nameReceiver?.name : group?.name
-                    }`}
+                    placeholder={`Nhập @, tin nhắn tới ${nameReceiver?.name ? nameReceiver?.name : group?.name}`}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                   />
-                  {image ? <img src={image} /> : ""}
+                  {image ? <img src={image} /> : ''}
                 </div>
                 <div className="chat-text-right">
-                  <div
-                    className="chat-text-icon"
-                    onClick={() => setDisplayIcons(!displayIcons)}
-                  >
+                  <div className="chat-text-icon" onClick={() => setDisplayIcons(!displayIcons)}>
                     <i
                       className="fa-regular fa-face-grin"
                       style={{
-                        fontSize: "20px",
-                        color: displayIcons ? "#0068ff" : "",
+                        fontSize: '20px',
+                        color: displayIcons ? '#0068ff' : '',
                       }}
                     ></i>
-                    <div
-                      className="content-icons"
-                      style={{ display: displayIcons ? "flex" : "none" }}
-                    >
-                      <Picker
-                        data={data}
-                        onEmojiSelect={(e) => setMessage(message + e.native)}
-                      />
+                    <div className="content-icons" style={{ display: displayIcons ? 'flex' : 'none' }}>
+                      <Picker data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
                     </div>
                   </div>
 
@@ -1498,35 +1271,24 @@ const ContentChat = ({
           <div
             className="chat-info"
             style={{
-              width: isClickInfo ? "30%" : "",
-              display: isClickInfo ? "flex" : "none",
-              height: isClickInfo ? "100%" : "",
+              width: isClickInfo ? '30%' : '',
+              display: isClickInfo ? 'flex' : 'none',
+              height: isClickInfo ? '100%' : '',
             }}
           >
             {isClickViewMember ? (
               <>
-                <div
-                  className="header"
-                  style={{ justifyContent: "flex-start" }}
-                >
-                  <IoChevronBack
-                    onClick={() => setIsClickViewMember(false)}
-                    style={{ cursor: "pointer" }}
-                  />
-                  <span style={{ marginLeft: "70px" }}>Thành viên</span>
+                <div className="header" style={{ justifyContent: 'flex-start' }}>
+                  <IoChevronBack onClick={() => setIsClickViewMember(false)} style={{ cursor: 'pointer' }} />
+                  <span style={{ marginLeft: '70px' }}>Thành viên</span>
                 </div>
                 <div className="view-member">
-                  <div
-                    className="add-member"
-                    onClick={() => setIsClickAddMember(true)}
-                  >
+                  <div className="add-member" onClick={() => setIsClickAddMember(true)}>
                     <AiOutlineUsergroupAdd className="icon" />
                     <span>Thêm thành viên</span>
                   </div>
                   <div className="list-member">
-                    <span className="list-member-text">
-                      Danh sách thành viên
-                    </span>
+                    <span className="list-member-text">Danh sách thành viên</span>
                     {membersOfGroup?.map((u, index) => (
                       <div
                         className="member"
@@ -1534,113 +1296,67 @@ const ContentChat = ({
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setShowUtilsForLeader(false)}
                       >
-                        <div
-                          className="member-avt"
-                          style={{ position: "relative" }}
-                        >
+                        <div className="member-avt" style={{ position: 'relative' }}>
                           <img src={u.image} />
                           {(group.leader === u.id || group.deputy === u.id) && (
                             <span
                               style={{
-                                position: "absolute",
+                                position: 'absolute',
                                 bottom: -5,
                                 right: 0,
-                                fontSize: "8px",
-                                color:
-                                  group.leader === u.id ? "yellow" : "silver",
-                                borderRadius: "50%",
-                                padding: "5px",
-                                backgroundColor: "#666666",
-                                fontWeight: "bold",
+                                fontSize: '8px',
+                                color: group.leader === u.id ? 'yellow' : 'silver',
+                                borderRadius: '50%',
+                                padding: '5px',
+                                backgroundColor: '#666666',
+                                fontWeight: 'bold',
                               }}
                             >
-                              {group.leader === u.id ? "TN" : "PN"}
+                              {group.leader === u.id ? 'TN' : 'PN'}
                             </span>
                           )}
                         </div>
                         <div className="member-name">{u.name}</div>
-                        {(group.leader === userId ||
-                          group.deputy === userId) && (
+                        {(group.leader === userId || group.deputy === userId) && (
                           <i
                             className="fa-solid fa-ellipsis icon"
-                            onClick={() =>
-                              setShowUtilsForLeader(!showUtilsForLeader)
-                            }
+                            onClick={() => setShowUtilsForLeader(!showUtilsForLeader)}
                           ></i>
                         )}
-                        {showUtilsForLeader &&
-                          index === hoveredIndex &&
-                          u.id !== group.leader && (
-                            <div
-                              className="utils-leader"
-                              style={{
-                                width: "180px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {userId === group.leader &&
-                              group.deputy === null ? (
-                                <span
-                                  onClick={() =>
-                                    handleClickChangeLeaderAndDeputy(
-                                      group.leader,
-                                      u.id
-                                    )
-                                  }
-                                >
-                                  Thêm phó nhóm
-                                </span>
-                              ) : userId === group.leader &&
-                                group.deputy === u.id ? (
-                                <span
-                                  onClick={() =>
-                                    handleClickChangeLeaderAndDeputy(
-                                      group.leader,
-                                      null
-                                    )
-                                  }
-                                >
-                                  Xóa phó nhóm
-                                </span>
-                              ) : null}
-                              {userId === group.leader &&
-                                group.deputy !== null &&
-                                group.deputy !== u.id && (
-                                  <span
-                                    onClick={() =>
-                                      handleClickChangeLeaderAndDeputy(
-                                        group.leader,
-                                        u.id
-                                      )
-                                    }
-                                  >
-                                    Đổi phó nhóm
-                                  </span>
-                                )}
-                              {(userId === group.leader ||
-                                userId === group.deputy) && (
-                                <span
-                                  onClick={() => handleClickDeleteMember(u.id)}
-                                >
-                                  {userId === u.id
-                                    ? "Rời khỏi nhóm"
-                                    : "Xóa khỏi nhóm"}
-                                </span>
-                              )}
-                              {userId === group.leader && (
-                                <span
-                                  onClick={() =>
-                                    handleClickChangeLeaderAndDeputy(
-                                      u.id,
-                                      group.deputy
-                                    )
-                                  }
-                                >
-                                  Chuyển trưởng nhóm
-                                </span>
-                              )}
-                            </div>
-                          )}
+                        {showUtilsForLeader && index === hoveredIndex && u.id !== group.leader && (
+                          <div
+                            className="utils-leader"
+                            style={{
+                              width: '180px',
+                              textAlign: 'center',
+                            }}
+                          >
+                            {userId === group.leader && group.deputy === null ? (
+                              <span onClick={() => handleClickChangeLeaderAndDeputy(group.leader, u.id)}>
+                                Thêm phó nhóm
+                              </span>
+                            ) : userId === group.leader && group.deputy === u.id ? (
+                              <span onClick={() => handleClickChangeLeaderAndDeputy(group.leader, null)}>
+                                Xóa phó nhóm
+                              </span>
+                            ) : null}
+                            {userId === group.leader && group.deputy !== null && group.deputy !== u.id && (
+                              <span onClick={() => handleClickChangeLeaderAndDeputy(group.leader, u.id)}>
+                                Đổi phó nhóm
+                              </span>
+                            )}
+                            {(userId === group.leader || userId === group.deputy) && (
+                              <span onClick={() => handleClickDeleteMember(u.id)}>
+                                {userId === u.id ? 'Rời khỏi nhóm' : 'Xóa khỏi nhóm'}
+                              </span>
+                            )}
+                            {userId === group.leader && (
+                              <span onClick={() => handleClickChangeLeaderAndDeputy(u.id, group.deputy)}>
+                                Chuyển trưởng nhóm
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -1652,43 +1368,32 @@ const ContentChat = ({
                 <div className="header-info">
                   <div className="header-info-avt">
                     <img
-                      src={
-                        nameReceiver?.image == null
-                          ? group?.image
-                          : nameReceiver?.image
-                      }
+                      src={nameReceiver?.image == null ? group?.image : nameReceiver?.image}
                       style={{
-                        width: "60px",
-                        height: "60px",
-                        borderRadius: "50%",
+                        width: '60px',
+                        height: '60px',
+                        borderRadius: '50%',
                       }}
                     />
-                    <label
-                      htmlFor="image"
-                      style={{ marginLeft: "-15px", marginTop: "45px" }}
-                    >
-                      <IoCameraOutline style={{ cursor: "pointer" }} />
+                    <label htmlFor="image" style={{ marginLeft: '-15px', marginTop: '45px' }}>
+                      <IoCameraOutline style={{ cursor: 'pointer' }} />
                     </label>
                     <input
                       type="file"
                       accept=".png, .jpg, .jpeg, .gif, .bmp, .tiff"
                       multiple
-                      style={{ display: "none" }}
+                      style={{ display: 'none' }}
                       id="image"
                       onChange={(e) => handleChangeFile(e)}
                     />
                   </div>
                   <div className="header-info-name">
-                    <div className="user-name">
-                      {nameReceiver?.name ? nameReceiver?.name : group?.name}
-                    </div>
+                    <div className="user-name">{nameReceiver?.name ? nameReceiver?.name : group?.name}</div>
                     <div className="user-edit">
                       {nameReceiver?.name ? (
                         <EditOutlined onClick={() => setIsClickUpdate(true)} />
                       ) : (
-                        <EditOutlined
-                          onClick={() => setIsClickUpdateNameGroup(true)}
-                        />
+                        <EditOutlined onClick={() => setIsClickUpdateNameGroup(true)} />
                       )}
                     </div>
                   </div>
@@ -1715,10 +1420,7 @@ const ContentChat = ({
                     ) : (
                       <>
                         <div className="group-chat">
-                          <AiOutlineUsergroupAdd
-                            className="icon"
-                            onClick={() => setIsClickAddMember(true)}
-                          />
+                          <AiOutlineUsergroupAdd className="icon" onClick={() => setIsClickAddMember(true)} />
                           <span>
                             Thêm <br /> thành viên
                           </span>
@@ -1749,27 +1451,14 @@ const ContentChat = ({
                     <div className="group-member">
                       <div className="member-header">
                         <span>Thành viên nhóm</span>
-                        <div
-                          onClick={() =>
-                            setIsClickDownMember(!isClickDownMember)
-                          }
-                        >
-                          {isClickDownMember ? (
-                            <FaCaretRight className="icon" />
-                          ) : (
-                            <FaCaretDown className="icon" />
-                          )}
+                        <div onClick={() => setIsClickDownMember(!isClickDownMember)}>
+                          {isClickDownMember ? <FaCaretRight className="icon" /> : <FaCaretDown className="icon" />}
                         </div>
                       </div>
-                      <div style={{ display: isClickDownMember ? "none" : "" }}>
-                        <div
-                          className="member-body"
-                          onClick={() => setIsClickViewMember(true)}
-                        >
+                      <div style={{ display: isClickDownMember ? 'none' : '' }}>
+                        <div className="member-body" onClick={() => setIsClickViewMember(true)}>
                           <MdGroups className="icon" />
-                          <span style={{ marginRight: "5px" }}>
-                            {group?.members?.length}
-                          </span>
+                          <span style={{ marginRight: '5px' }}>{group?.members?.length}</span>
                           <span>thành viên</span>
                         </div>
                       </div>
@@ -1778,14 +1467,10 @@ const ContentChat = ({
                       <div className="new-header">
                         <span>Bảng tin nhóm</span>
                         <div onClick={() => setIsClickDownNew(!isClickDownNew)}>
-                          {isClickDownNew ? (
-                            <FaCaretRight className="icon" />
-                          ) : (
-                            <FaCaretDown className="icon" />
-                          )}
+                          {isClickDownNew ? <FaCaretRight className="icon" /> : <FaCaretDown className="icon" />}
                         </div>
                       </div>
-                      <div style={{ display: isClickDownNew ? "none" : "" }}>
+                      <div style={{ display: isClickDownNew ? 'none' : '' }}>
                         <div className="new-body">
                           <LuAlarmClock className="icon" />
                           <span>Danh sách nhắc hẹn</span>
@@ -1803,66 +1488,42 @@ const ContentChat = ({
                   <div className="media-header">
                     <span>Ảnh/Video</span>
                     <div onClick={() => setIsClickDownMedia(!isClickDownMedia)}>
-                      {isClickDownMedia ? (
-                        <FaCaretRight className="icon" />
-                      ) : (
-                        <FaCaretDown className="icon" />
-                      )}
+                      {isClickDownMedia ? <FaCaretRight className="icon" /> : <FaCaretDown className="icon" />}
                     </div>
                   </div>
-                  <div style={{ display: isClickDownMedia ? "none" : "" }}>
+                  <div style={{ display: isClickDownMedia ? 'none' : '' }}>
                     <div className="media-body">
                       {contentMessages.map((message, index) => (
                         <div className="frame" key={index}>
                           {message.message.includes(regexUrl) &&
-                          imageType.includes(
-                            message.message.substring(
-                              message.message.lastIndexOf(".") + 1
-                            )
-                          ) ? (
-                            <a
-                              href={message.message}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
+                          imageType.includes(message.message.substring(message.message.lastIndexOf('.') + 1)) ? (
+                            <a href={message.message} target="_blank" rel="noopener noreferrer">
                               <img
                                 src={message.message}
                                 style={{
-                                  width: "50px",
-                                  height: "50px",
-                                  border: "1px solid #7589a3",
-                                  borderRadius: "4px",
+                                  width: '50px',
+                                  height: '50px',
+                                  border: '1px solid #7589a3',
+                                  borderRadius: '4px',
                                 }}
                               />
                             </a>
-                          ) : (
-                            null
-                          )}
+                          ) : null}
                           {message.message.includes(regexUrl) &&
-                          videoType.includes(
-                            message.message.substring(
-                              message.message.lastIndexOf(".") + 1
-                            )
-                          ) ? (
-                            <a
-                              href={message.message}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
+                          videoType.includes(message.message.substring(message.message.lastIndexOf('.') + 1)) ? (
+                            <a href={message.message} target="_blank" rel="noopener noreferrer">
                               <video
                                 src={message.message}
                                 controls
                                 style={{
-                                  width: "50px",
-                                  height: "50px",
-                                  border: "1px solid #7589a3",
-                                  borderRadius: "4px",
+                                  width: '50px',
+                                  height: '50px',
+                                  border: '1px solid #7589a3',
+                                  borderRadius: '4px',
                                 }}
                               />
                             </a>
-                          ) : (
-                            null
-                          )}
+                          ) : null}
                         </div>
                       ))}
                     </div>
@@ -1876,33 +1537,22 @@ const ContentChat = ({
                   <div className="file-header">
                     <span>File</span>
                     <div onClick={() => setIsClickDownFile(!isClickDownFile)}>
-                      {isClickDownFile ? (
-                        <FaCaretRight className="icon" />
-                      ) : (
-                        <FaCaretDown className="icon" />
-                      )}
+                      {isClickDownFile ? <FaCaretRight className="icon" /> : <FaCaretDown className="icon" />}
                     </div>
                   </div>
-                  <div style={{ display: isClickDownFile ? "none" : "" }}>
+                  <div style={{ display: isClickDownFile ? 'none' : '' }}>
                     {contentMessages.map((message, index) => (
                       <div className="file-body" key={index}>
                         {message.message.includes(regexUrl) &&
-                        fileType.includes(
-                          message.message.substring(
-                            message.message.lastIndexOf(".") + 1
-                          )
-                        ) ? (
+                        fileType.includes(message.message.substring(message.message.lastIndexOf('.') + 1)) ? (
                           <div className="frame">
                             <ViewFile url={message.message} />
-                            <span
-                              className="info time"
-                              style={{ fontSize: 10, color: "darkgrey" }}
-                            >
-                              {message.dateTimeSend?.split("T")[0]}
+                            <span className="info time" style={{ fontSize: 10, color: 'darkgrey' }}>
+                              {message.dateTimeSend?.split('T')[0]}
                             </span>
                           </div>
                         ) : (
-                          ""
+                          ''
                         )}
                       </div>
                     ))}
@@ -1916,14 +1566,10 @@ const ContentChat = ({
                   <div className="file-header">
                     <span>Link</span>
                     <div onClick={() => setIsClickDownLink(!isClickDownLink)}>
-                      {isClickDownLink ? (
-                        <FaCaretRight className="icon" />
-                      ) : (
-                        <FaCaretDown className="icon" />
-                      )}
+                      {isClickDownLink ? <FaCaretRight className="icon" /> : <FaCaretDown className="icon" />}
                     </div>
                   </div>
-                  <div style={{ display: isClickDownLink ? "none" : "" }}>
+                  <div style={{ display: isClickDownLink ? 'none' : '' }}>
                     <div className="link-body">
                       <div className="frame"></div>
                     </div>
@@ -1932,23 +1578,14 @@ const ContentChat = ({
                     </div>
                   </div>
                 </div>
-                <div className="group-setting" style={{ borderBottom: "none" }}>
+                <div className="group-setting" style={{ borderBottom: 'none' }}>
                   <div className="setting-header">
                     <span>Thiết lập bảo mật</span>
-                    <div
-                      onClick={() => setIsClickDownSetting(!isClickDownSetting)}
-                    >
-                      {isClickDownSetting ? (
-                        <FaCaretRight className="icon" />
-                      ) : (
-                        <FaCaretDown className="icon" />
-                      )}
+                    <div onClick={() => setIsClickDownSetting(!isClickDownSetting)}>
+                      {isClickDownSetting ? <FaCaretRight className="icon" /> : <FaCaretDown className="icon" />}
                     </div>
                   </div>
-                  <div
-                    className="setting-body"
-                    style={{ display: isClickDownSetting ? "none" : "" }}
-                  >
+                  <div className="setting-body" style={{ display: isClickDownSetting ? 'none' : '' }}>
                     {/* <div className="hidden-chat">
                       <BsEyeSlash className="icon" />
                       <span>Ẩn trò chuyện</span>
@@ -1960,18 +1597,12 @@ const ContentChat = ({
                     </div> */}
                     {isGroup && (
                       <>
-                        <div
-                          className="delete-chat"
-                          onClick={() => handleClickDeleteMember(userId)}
-                        >
+                        <div className="delete-chat" onClick={() => handleClickDeleteMember(userId)}>
                           <GrReturn className="icon" />
                           <span>Rời nhóm</span>
                         </div>
                         {userId === group?.leader && (
-                          <div
-                            className="delete-chat"
-                            onClick={handleClickDissolutionGroup}
-                          >
+                          <div className="delete-chat" onClick={handleClickDissolutionGroup}>
                             <GrReturn className="icon" />
                             <span>Giải tán nhóm</span>
                           </div>

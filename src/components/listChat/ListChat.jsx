@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import "../../sass/ListChat.scss";
-import moment from "moment/moment";
-import "moment/locale/vi";
-import FormSearchFriendByPhone from "./components/FormSearchFriendByPhone";
-import FormDeleteChat from "./components/FormDeleteChat";
-import FormCreateGroup from "./components/FormCreateGroup";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import '../../sass/ListChat.scss';
+import moment from 'moment/moment';
+import 'moment/locale/vi';
+import FormSearchFriendByPhone from './components/FormSearchFriendByPhone';
+import FormDeleteChat from './components/FormDeleteChat';
+import FormCreateGroup from './components/FormCreateGroup';
+import axios from 'axios';
 
 const ListChat = ({
   displayListChat,
@@ -22,31 +22,27 @@ const ListChat = ({
 }) => {
   const [isPrioritize, setIsPrioritize] = useState(true);
   const [chatSelected, setChatsSelected] = useState(0);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [listChat, setListChat] = useState([]);
   const [visibleFriendByPhone, setVisibleFriendByPhone] = useState(false);
-  const [regexUrl] = useState(
-    "https://s3-dynamodb-cloudfront-20040331.s3.ap-southeast-1.amazonaws.com/"
-  );
+  const [regexUrl] = useState('https://zalo-clone-203.s3.ap-southeast-1.amazonaws.com/');
   const [isClickUtils, setIsClickUtils] = useState(false);
-  const [idChat, setIdChat] = useState("");
+  const [idChat, setIdChat] = useState('');
   const [visibleDel, setVisibleDel] = useState(false);
   const [visibleGroup, setVisibleGroup] = useState(false);
 
   useEffect(() => {
     // setListChat([...chats]);
-    setSearch("");
-    handleChangeSearchValue("");
+    setSearch('');
+    handleChangeSearchValue('');
   }, [JSON.stringify(chats)]);
 
   useEffect(() => {
     if (messageFinal) {
       let findMessage = chats.find(
         (c) =>
-          (c.sender === messageFinal?.sender ||
-            c.sender === messageFinal?.receiver) &&
-          (c.receiver === messageFinal?.sender ||
-            c.receiver === messageFinal?.receiver)
+          (c.sender === messageFinal?.sender || c.sender === messageFinal?.receiver) &&
+          (c.receiver === messageFinal?.sender || c.receiver === messageFinal?.receiver)
       );
 
       if (findMessage) {
@@ -56,27 +52,27 @@ const ListChat = ({
     }
   }, [JSON.stringify(messageFinal)]);
 
-  let handleClickChat = async(chat) => {
-    let dateTimeSend = moment().format("YYYY-MM-DD HH:mm:ss")
+  let handleClickChat = async (chat) => {
+    let dateTimeSend = moment().format('YYYY-MM-DD HH:mm:ss');
     if (chat.phone) {
-      await axios.post(`${urlBackend}/wait-message/update/${chat.id}/${userId}/${dateTimeSend}`)
+      await axios.post(`${urlBackend}/wait-message/update/${chat.id}/${userId}/${dateTimeSend}`);
       handleChangeChat({
         id: chat.id,
-        type: "Single",
+        type: 'Single',
       });
       setChatsSelected({
         id: chat.id,
-        type: "Single",
+        type: 'Single',
       });
     } else {
-      await axios.post(`${urlBackend}/wait-message/update/${userId}/Group/${chat.id}/${dateTimeSend}`)
+      await axios.post(`${urlBackend}/wait-message/update/${userId}/Group/${chat.id}/${dateTimeSend}`);
       handleChangeChat({
         id: chat.id,
-        type: "Group",
+        type: 'Group',
       });
       setChatsSelected({
         id: chat.id,
-        type: "Group",
+        type: 'Group',
       });
     }
   };
@@ -91,10 +87,7 @@ const ListChat = ({
     setIdChat(id);
   };
   return (
-    <div
-      className="container-list-chat"
-      style={{ display: displayListChat ? "flex" : "none" }}
-    >
+    <div className="container-list-chat" style={{ display: displayListChat ? 'flex' : 'none' }}>
       <div className="contents-search-types">
         <div className="content-search">
           <div className="search">
@@ -115,24 +108,18 @@ const ListChat = ({
             makeFriends={makeFriends}
             setRerender={setRerender}
           />
-          <i
-            className="fa-solid fa-user-plus icon-user"
-            onClick={() => setVisibleFriendByPhone(true)}
-          ></i>
+          <i className="fa-solid fa-user-plus icon-user" onClick={() => setVisibleFriendByPhone(true)}></i>
           <span
             style={{
-              color: "red",
+              color: 'red',
               marginBottom: 20,
               marginLeft: -10,
               fontSize: 12,
             }}
           >
-            {makeFriends?.length > 0 ? `+` + makeFriends?.length : ""}
+            {makeFriends?.length > 0 ? `+` + makeFriends?.length : ''}
           </span>
-          <i
-            className="fa-solid fa-users icon-user"
-            onClick={() => setVisibleGroup(true)}
-          ></i>
+          <i className="fa-solid fa-users icon-user" onClick={() => setVisibleGroup(true)}></i>
           {visibleGroup && (
             <FormCreateGroup
               visible={visibleGroup}
@@ -149,7 +136,7 @@ const ListChat = ({
               className="text"
               onClick={() => setIsPrioritize(true)}
               style={{
-                color: isPrioritize ? "#0068ff" : "#7c8fa6",
+                color: isPrioritize ? '#0068ff' : '#7c8fa6',
               }}
             >
               Ưu tiên
@@ -158,7 +145,7 @@ const ListChat = ({
               className="different text"
               onClick={() => setIsPrioritize(false)}
               style={{
-                color: isPrioritize ? "#7c8fa6" : "#0068ff",
+                color: isPrioritize ? '#7c8fa6' : '#0068ff',
               }}
             >
               Khác
@@ -166,8 +153,8 @@ const ListChat = ({
             <span
               className="border"
               style={{
-                width: isPrioritize ? "48px" : "38px",
-                left: isPrioritize ? "0px" : "65px",
+                width: isPrioritize ? '48px' : '38px',
+                left: isPrioritize ? '0px' : '65px',
               }}
             ></span>
           </div>
@@ -184,8 +171,8 @@ const ListChat = ({
       <div
         className="contents-chats"
         style={{
-          height: "100%",
-          overflowY: "scroll",
+          height: '100%',
+          overflowY: 'scroll',
         }}
       >
         {searchFriends !== null
@@ -195,16 +182,11 @@ const ListChat = ({
                 key={chat.id}
                 onClick={() => handleClickChat(chat)}
                 style={{
-                  backgroundColor:
-                    chatSelected.id === chat.id ? "#e5efff" : "white",
+                  backgroundColor: chatSelected.id === chat.id ? '#e5efff' : 'white',
                 }}
               >
                 <img
-                  src={
-                    chat.image == "null"
-                      ? "/public/avatardefault.png"
-                      : chat.image
-                  }
+                  src={chat.image == 'null' ? '/public/avatardefault.png' : chat.image}
                   style={{
                     height: 45,
                     width: 45,
@@ -213,10 +195,8 @@ const ListChat = ({
                     marginLeft: 20,
                   }}
                 />
-                <div style={{ flexDirection: "row", marginLeft: 10 }}>
-                  <div style={{ marginTop: 10, fontSize: 18, marginLeft: 5 }}>
-                    {chat.name}
-                  </div>
+                <div style={{ flexDirection: 'row', marginLeft: 10 }}>
+                  <div style={{ marginTop: 10, fontSize: 18, marginLeft: 5 }}>{chat.name}</div>
                 </div>
               </div>
             ))
@@ -226,17 +206,12 @@ const ListChat = ({
                 key={chat.id}
                 onClick={() => handleClickChat(chat)}
                 style={{
-                  backgroundColor:
-                    chatSelected.id === chat.id ? "#e5efff" : "white",
+                  backgroundColor: chatSelected.id === chat.id ? '#e5efff' : 'white',
                 }}
               >
-                <div style={{position : "relative"}}>
+                <div style={{ position: 'relative' }}>
                   <img
-                    src={
-                      chat.image == "null"
-                        ? "/public/avatardefault.png"
-                        : chat.image
-                    }
+                    src={chat.image == 'null' ? '/public/avatardefault.png' : chat.image}
                     style={{
                       height: 45,
                       width: 45,
@@ -245,95 +220,82 @@ const ListChat = ({
                       marginLeft: 20,
                     }}
                   />
-                  {
-                    chat.quantity > 0 && <span style={{
-                      position : "absolute",
-                      bottom : -15,
-                      right : 0,
-                      padding : "1px 7px",
-                      borderRadius : "50%",
-                      color : "white",
-                      background : "red",
-                      fontSize : "13px"
-                    }}>{chat.quantity}</span>
-                  }
+                  {chat.quantity > 0 && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        bottom: -15,
+                        right: 0,
+                        padding: '1px 7px',
+                        borderRadius: '50%',
+                        color: 'white',
+                        background: 'red',
+                        fontSize: '13px',
+                      }}
+                    >
+                      {chat.quantity}
+                    </span>
+                  )}
                 </div>
-                <div
-                  style={{ width: "40%", flexDirection: "row", marginLeft: 10 }}
-                >
-                  <div style={{ marginTop: 10, fontSize: 18, marginLeft: 5 }}>
-                    {chat.name}
-                  </div>
+                <div style={{ width: '40%', flexDirection: 'row', marginLeft: 10 }}>
+                  <div style={{ marginTop: 10, fontSize: 18, marginLeft: 5 }}>{chat.name}</div>
                   <div
                     style={{
                       fontSize: 15,
                       marginTop: 7,
-                      color: chat.quantity > 0 ? "black" : "gray",
+                      color: chat.quantity > 0 ? 'black' : 'gray',
                       marginLeft: 5,
-                      fontWeight: chat.quantity > 0 && "bold",
+                      fontWeight: chat.quantity > 0 && 'bold',
                     }}
                   >
-                    <span>{chat.sender == userId ? "Bạn: " : ""}</span>
+                    <span>{chat.sender == userId ? 'Bạn: ' : ''}</span>
                     <span>
                       {chat.message?.length > 15
                         ? chat.message.includes(regexUrl)
-                          ? chat.message.split("--")[1].slice(0, 10)
+                          ? chat.message.split('--')[1].slice(0, 10)
                           : chat.message.slice(0, 10)
                         : chat.message}
                     </span>
-                    <span>{chat.message?.length > 15 ? "..." : null}</span>
+                    <span>{chat.message?.length > 15 ? '...' : null}</span>
                   </div>
                 </div>
                 <div
                   style={{
-                    width: "35%",
-                    textAlign: "end",
-                    display: "flex",
-                    flexDirection: "column",
-                    position: "relative",
+                    width: '35%',
+                    textAlign: 'end',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
                   }}
                 >
                   <div style={{ padding: 5 }}>
-                    <i
-                      className="fa-solid fa-ellipsis icon"
-                      onClick={() => handleClickUtils(chat.id)}
-                    ></i>
+                    <i className="fa-solid fa-ellipsis icon" onClick={() => handleClickUtils(chat.id)}></i>
                   </div>
                   <span>
                     {moment
-                      .duration(
-                        moment().diff(
-                          moment(chat.dateTimeSend)
-                            .utcOffset(0)
-                            .format("YYYY-MM-DD HH:mm:ss")
-                        )
-                      )
+                      .duration(moment().diff(moment(chat.dateTimeSend).utcOffset(0).format('YYYY-MM-DD HH:mm:ss')))
                       .humanize(true)}
                   </span>
                   {idChat === chat.id && isClickUtils && (
                     <div
                       style={{
-                        width: "150px",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        justifyContent: "space-around",
+                        width: '150px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        justifyContent: 'space-around',
                         //padding: "5px 0 5px 10px",
-                        backgroundColor: "white",
-                        position: "absolute",
+                        backgroundColor: 'white',
+                        position: 'absolute',
                         zIndex: 1,
-                        borderRadius: "2%",
-                        boxShadow: "0 0 5px #b4a7a7",
+                        borderRadius: '2%',
+                        boxShadow: '0 0 5px #b4a7a7',
                         left: -14,
                         top: 25,
                       }}
                     >
                       <div className="utils">Ghim hội thoại</div>
-                      <div
-                        className="utils"
-                        style={{ color: "red" }}
-                        onClick={() => setVisibleDel(true)}
-                      >
+                      <div className="utils" style={{ color: 'red' }} onClick={() => setVisibleDel(true)}>
                         Xóa hội thoại
                       </div>
                       <FormDeleteChat

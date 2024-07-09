@@ -1,27 +1,18 @@
-import { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, Checkbox, Avatar } from "antd";
-import axios from "axios";
-import ViewFile from "./ViewFile";
-import { io } from "socket.io-client";
-import moment from "moment";
+import { useState, useEffect } from 'react';
+import { Modal, Button, Form, Input, Checkbox, Avatar } from 'antd';
+import axios from 'axios';
+import ViewFile from './ViewFile';
+import { io } from 'socket.io-client';
+import moment from 'moment';
 
-const ForwardMessageForm = ({
-  userId,
-  visible,
-  onCancel,
-  sharedContentFromInfoMess,
-  setRerender,
-  urlBackend
-}) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const ForwardMessageForm = ({ userId, visible, onCancel, sharedContentFromInfoMess, setRerender, urlBackend }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedFriendsTemp, setSelectedFriendsTemp] = useState([]);
   const [selectedIdFriends, setSelectedIdFriends] = useState([]);
   const [sharedContent, setSharedContent] = useState(sharedContentFromInfoMess);
   const [editable, setEditable] = useState(false);
   const [friendList, setFriendList] = useState([]);
-  const [regexUrl] = useState(
-    "https://s3-dynamodb-cloudfront-20040331.s3.ap-southeast-1.amazonaws.com/"
-  );
+  const [regexUrl] = useState('https://zalo-clone-203.s3.ap-southeast-1.amazonaws.com/');
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
@@ -32,12 +23,10 @@ const ForwardMessageForm = ({
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get(
-          `${urlBackend}/users/get-chats-by-id/${userId}`
-        );
+        const response = await axios.get(`${urlBackend}/users/get-chats-by-id/${userId}`);
         setFriendList(response.data);
       } catch (error) {
-        console.error("Error fetching friends:", error);
+        console.error('Error fetching friends:', error);
       }
     };
     fetchFriends();
@@ -45,27 +34,28 @@ const ForwardMessageForm = ({
 
   const handleCancel = () => {
     setSelectedFriendsTemp([]);
-    setSharedContent("");
+    setSharedContent('');
     setEditable(false);
     onCancel();
   };
 
   const handleFriendChange = (checkedValues) => {
-    setSelectedIdFriends(checkedValues)
-    setSelectedFriendsTemp(checkedValues.map(o => {
-      if(o.leader){
-        return {
-          id : o.id,
-          type : "Group"
+    setSelectedIdFriends(checkedValues);
+    setSelectedFriendsTemp(
+      checkedValues.map((o) => {
+        if (o.leader) {
+          return {
+            id: o.id,
+            type: 'Group',
+          };
+        } else {
+          return {
+            id: o.id,
+            type: 'Single',
+          };
         }
-      }
-      else{
-        return {
-          id : o.id,
-          type : "Single"
-        }
-      }
-    }));
+      })
+    );
   };
 
   const handleEditClick = () => {
@@ -76,15 +66,11 @@ const ForwardMessageForm = ({
     setSearchTerm(e.target.value);
     let datas = [];
     if (e.target.value) {
-      datas = await axios.get(
-        `${urlBackend}/users/friends/${userId}/${e.target.value}`
-      );
+      datas = await axios.get(`${urlBackend}/users/friends/${userId}/${e.target.value}`);
     } else {
-      datas = await axios.get(
-        `${urlBackend}/users/friends/${userId}`
-      );
+      datas = await axios.get(`${urlBackend}/users/friends/${userId}`);
     }
-    setFriendList([...datas.data])
+    setFriendList([...datas.data]);
   };
 
   const sendMessage = () => {
@@ -92,17 +78,20 @@ const ForwardMessageForm = ({
       for (let index = 0; index < selectedFriendsTemp.length; index++) {
         socket.emit(`Client-Chat-Room`, {
           message: sharedContent,
-          dateTimeSend : moment()
-          .utcOffset(7)
-          .format("YYYY-MM-DD HH:mm:ss"),
+          dateTimeSend: moment().utcOffset(7).format('YYYY-MM-DD HH:mm:ss'),
           sender: userId,
-          receiver: selectedFriendsTemp[index].type === "Single" ? selectedFriendsTemp[index].id : null,
-          groupChat: selectedFriendsTemp[index].type === "Group" ? selectedFriendsTemp[index].id : null,
-          chatRoom: selectedFriendsTemp[index].type === "Single" ? userId > selectedFriendsTemp[index].id ? `${selectedFriendsTemp[index].id}${userId}` : `${userId}${selectedFriendsTemp[index].id}` : selectedFriendsTemp[index].id,
+          receiver: selectedFriendsTemp[index].type === 'Single' ? selectedFriendsTemp[index].id : null,
+          groupChat: selectedFriendsTemp[index].type === 'Group' ? selectedFriendsTemp[index].id : null,
+          chatRoom:
+            selectedFriendsTemp[index].type === 'Single'
+              ? userId > selectedFriendsTemp[index].id
+                ? `${selectedFriendsTemp[index].id}${userId}`
+                : `${userId}${selectedFriendsTemp[index].id}`
+              : selectedFriendsTemp[index].id,
         });
       }
-      onCancel()
-      setRerender(pre => !pre)
+      onCancel();
+      setRerender((pre) => !pre);
     }
   };
 
@@ -127,29 +116,25 @@ const ForwardMessageForm = ({
     >
       <Form layout="vertical">
         <Form.Item label="Tìm kiếm">
-          <Input
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Tìm kiếm bạn bè"
-          />
+          <Input value={searchTerm} onChange={handleSearchChange} placeholder="Tìm kiếm bạn bè" />
         </Form.Item>
         <Form.Item label="Bạn bè">
           <Checkbox.Group
             onChange={handleFriendChange}
             value={selectedIdFriends}
-            style={{ width: "100%", display: "flex", flexDirection: "column" }}
+            style={{ width: '100%', display: 'flex', flexDirection: 'column' }}
           >
             {friendList.map((friend) => (
               <div
                 key={friend.id}
                 style={{
-                  marginBottom: "8px",
-                  display: "flex",
-                  alignItems: "center",
+                  marginBottom: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
-                <Checkbox value={friend} style={{ marginRight: "8px" }}>
-                  <Avatar src={friend.image} style={{ marginRight: "8px" }} />
+                <Checkbox value={friend} style={{ marginRight: '8px' }}>
+                  <Avatar src={friend.image} style={{ marginRight: '8px' }} />
                   {friend.name}
                 </Checkbox>
               </div>
@@ -160,9 +145,9 @@ const ForwardMessageForm = ({
         <Form.Item label="Nội dung chia sẻ">
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
           >
             {sharedContentFromInfoMess.includes(regexUrl) ? (
@@ -173,14 +158,10 @@ const ForwardMessageForm = ({
                   value={sharedContent}
                   onChange={(e) => setSharedContent(e.target.value)}
                   placeholder="Nhập nội dung chia sẻ"
-                  style={{ flex: "1", marginRight: "5px" }}
+                  style={{ flex: '1', marginRight: '5px' }}
                   disabled={!editable}
                 />
-                <Button
-                  style={{ width: "80px" }}
-                  onClick={handleEditClick}
-                  disabled={editable}
-                >
+                <Button style={{ width: '80px' }} onClick={handleEditClick} disabled={editable}>
                   Sửa
                 </Button>
               </>
