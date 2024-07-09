@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,16 +36,16 @@ const firebaseConfig = {
 };*/
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCOnAT0Dblm7SAKks1ahZiQIEkiORuLH9w",
-  authDomain: "otp-app-zalo.firebaseapp.com",
-  projectId: "otp-app-zalo",
-  storageBucket: "otp-app-zalo.appspot.com",
-  messagingSenderId: "30201404335",
-  appId: "1:30201404335:web:846ea4327c3f4f04b9ad5a",
-  measurementId: "G-C4502D7JVC"
+  apiKey: 'AIzaSyBecRaZKBC5KAWouNTAnM5k8FcARpkXRso',
+  authDomain: 'zalo-77560.firebaseapp.com',
+  projectId: 'zalo-77560',
+  storageBucket: 'zalo-77560.appspot.com',
+  messagingSenderId: '294638203599',
+  appId: '1:294638203599:web:2c8dcffe9ac698da6bbdba',
+  measurementId: 'G-29WYTBSDTQ',
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app)
+export const auth = getAuth(app);
